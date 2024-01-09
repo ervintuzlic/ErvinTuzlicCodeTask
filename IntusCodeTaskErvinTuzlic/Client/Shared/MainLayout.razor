@@ -1,0 +1,25 @@
+﻿@using BlazorBootstrap
+@inherits LayoutComponentBase
+
+<div class="bb-page">
+    <div id="header-nav" class="main-header header-nav-fixed">
+        <div class="main-container header-nav-default">
+            <div class="title">
+                <h4 class="m-0"><img src="/images/etlogo.svg" /></h4>
+            </div>
+            <div class="title">
+                <NavMenu></NavMenu>
+            </div>
+        </div>
+    </div>
+    <main>
+        <article class="content">
+            <div class="py-2">
+                @Body
+            </div>
+        </article>
+    </main>
+
+</div>
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />

@@ -1,0 +1,42 @@
+﻿@page "/orders"
+@using IntusCodeTaskErvinTuzlic.Client.Pages.Orders.ViewModels
+
+<div class="orders-component main-container">
+    <Card Class="w-100">
+        <CardBody>
+            <h5 class="m-0">Manage Orders</h5>
+        </CardBody>
+    </Card>
+
+    <div class="neworder-button-container">
+        <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Class="mt-4" @onclick="() => AddNewOrder()">Add New Order</Button>
+    </div>
+
+    <div class="orders-grid w-100">
+        <Grid @ref="Grid" TItem="OrderListViewModel" Class="table table-striped mt-4" DataProvider="OrdersDataProvider"
+            PageSize="@PageSize" PageSizeSelectorItems="@(new int[] { 5,20,75 })" PaginationItemsTextFormat="Showing {0}-{1} of {2} items" 
+            AllowPaging="true" AllowFiltering="true" PageSizeSelectorVisible="true" AllowSorting="true" Responsive="true">
+
+            <GridColumn TItem="OrderListViewModel" PropertyName="Name" Filterable=true HeaderText="Name" SortKeySelector="item => item.Name">
+                @context.Name
+            </GridColumn>
+
+            <GridColumn TItem="OrderListViewModel" PropertyName="State" Filterable=true TextAlignment="Alignment.Center" HeaderTextAlignment="Alignment.Center" HeaderText="State" SortKeySelector="item => item.State">
+                @context.State
+            </GridColumn>
+
+            <GridColumn TItem="OrderListViewModel" HeaderText="Action(s)" Filterable="false" Sortable="false" TextAlignment="Alignment.Center" HeaderTextAlignment="Alignment.Center">
+                <div class="flex-btn">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="() => EditOrder(context)" Outline="true">
+                        <i class="bi bi-pencil-square"></i>
+                    </Button>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Danger" @onclick="() => OpenDeleteOrderDialog(context)" Outline="true">
+                        <i class="bi bi-trash3"></i>
+                    </Button>
+                </div>
+            </GridColumn>
+        </Grid>
+    </div>
+</div>
+
+<ConfirmationDialog @ref="ConfirmationDialog" ActionEventCallback="DeleteOrder"></ConfirmationDialog>

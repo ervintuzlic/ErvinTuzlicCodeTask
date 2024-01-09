@@ -1,0 +1,125 @@
+﻿@page "/orders/new"
+@page "/orders/edit/{OrderId:int}"
+@using IntusCodeTaskErvinTuzlic.Shared.Enums
+
+
+<div class="orders-component main-container">
+    <Card Class="w-100">
+        <CardBody>
+            @if(OrderId > 0)
+            {
+                <h5 class="m-0">Edit Order: @OrderId</h5>
+            }
+            else
+            {
+                <h5 class="m-0">Create New Order</h5>
+            }
+        </CardBody>
+    </Card>
+
+    <Button Type="ButtonType.Button" Color="ButtonColor.Dark" Outline="true" class="mt-4" @onclick="() => NavigateToOrdersList()">Back To List</Button>
+
+    <EditForm class="w-100" EditContext="_editContext" OnValidSubmit="HandleValidSubmit">
+        <Card Class="w-100 mt-4 mb-4">
+            <CardBody>
+                <div class="d-flex gap-4">
+                    <div class="form-group col-3">
+                        <label class="mb-1">Order Name</label>
+                        <InputText class="form-control" @bind-Value="OrderViewModel.OrderName"></InputText>
+                        <ValidationMessage For=@(() => OrderViewModel.OrderName)></ValidationMessage>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="mb-1">State</label>
+                        <InputText class="form-control" @bind-Value="OrderViewModel.State"></InputText>
+                        <ValidationMessage For=@(() => OrderViewModel.State)></ValidationMessage>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+        @foreach (var window in OrderViewModel.Windows)
+        {
+            <Card Class="mb-4">
+                <CardBody>
+
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="form-group col-3">
+                            <label>Window Name</label>
+                            <InputText class="form-control" @bind-Value="window.WindowName"></InputText>
+                            <ValidationMessage For=@(() => window.WindowName)></ValidationMessage>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Quantity of windows</label>
+                            <InputNumber class="form-control" @bind-Value="window.QuantityOfWindows"></InputNumber>
+                            <ValidationMessage For=@(() => window.QuantityOfWindows)></ValidationMessage>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Total number of SubElements</label>
+                            <InputNumber disabled="true" class="form-control" @bind-Value="window.TotalSubElements"></InputNumber>
+                            <ValidationMessage For=@(() => window.TotalSubElements)></ValidationMessage>
+                        </div>
+                        <div class="form-group col-1 mt-4">
+                            <Button Color="ButtonColor.Danger" class="form-control" @onclick="() => RemoveWindow(window)"><i class="bi bi-trash3"></i></Button>
+                        </div>
+                    </div>
+
+                    @if (window.SubElements.Any())
+                    {
+                        <div class="row mt-4">
+                            <div class="form-group col-2">
+                                <label>Element</label>
+                            </div>
+                            <div class="form-group col-2">
+                                <label>Type</label>
+                            </div>
+                            <div class="form-group col-2">
+                                <label>Width</label>
+                            </div>
+                            <div class="form-group col-2">
+                                <label>Height</label>
+                            </div>
+                        </div>
+
+                        @foreach (var subElement in window.SubElements)
+                        {
+                            <div class="row align-items-start mb-3">
+                                <div class="form-group col-2">
+                                    <InputNumber class="form-control" ParsingErrorMessage="Must be greater than 0" @bind-Value="subElement.Element"></InputNumber>
+                                    <ValidationMessage For=@(() => subElement.Element)></ValidationMessage>
+                                </div>
+                                <div class="form-group col-2">
+                                    <InputSelect class="form-control" id="type" @bind-Value="@subElement.Type">
+                                        @foreach (var type in Enum.GetValues(typeof(SubElementType)))
+                                        {
+                                            <option value="@type">@type.ToString()</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For=@(() => subElement.Type)></ValidationMessage>
+                                </div>
+                                <div class="form-group col-2">
+                                    <InputNumber class="form-control" ParsingErrorMessage="Must be greater than 0" @bind-Value="subElement.Width"></InputNumber>
+                                    <ValidationMessage For=@(() => subElement.Width)></ValidationMessage>
+                                </div>
+                                <div class="form-group col-2">
+                                    <InputNumber class="form-control" ParsingErrorMessage="Must be greater than 0" @bind-Value="subElement.Height"></InputNumber>
+                                    <ValidationMessage For=@(() => subElement.Height)></ValidationMessage>
+                                </div>
+                                <div class="form-group" style="width:70px;">
+                                    <Button disabled="@(window.SubElements.Count > 1 ? false : true)"Color="ButtonColor.Danger" class="btn-sm form-control" @onclick="() => RemoveSubElement(window, subElement)"><i class="bi bi-trash3"></i></Button>
+                                </div>
+                            </div>
+                        }
+                        <Button class="btn-sm mt-1" Color="ButtonColor.Primary" @onclick="() => AddSubElement(window)">Add SubElement</Button>
+                    }
+                </CardBody>
+            </Card>
+        }
+        <div class="d-flex justify-content-between mt-4">
+            <Button Disabled="@(string.IsNullOrWhiteSpace(OrderViewModel.OrderName) ? true : false)" Color="ButtonColor.Primary" @onclick="() => AddWindow()">Add Window</Button>
+            <div class="float-end">
+                <Button Disabled="@(string.IsNullOrWhiteSpace(OrderViewModel.OrderName) || !OrderViewModel.Windows.Any() ? true : false)" Color="ButtonColor.Primary" Type="ButtonType.Submit">Save</Button>
+            </div>
+        </div>
+
+    </EditForm>
+
+</div>
