@@ -81,7 +81,7 @@ public class OrdersService : IOrdersService
             existingOrder.ModifiedUtc = DateTime.UtcNow;
 
             var windowsToDelete = existingOrder.Windows
-                .Where(x => x.Id != 0 && !request.Windows.Any(w => w.WindowId == x.Id))
+                .Where(x => !request.Windows.Any(w => w.WindowId == x.Id))
                 .ToList();
 
             _context.Windows.RemoveRange(windowsToDelete);
@@ -123,7 +123,7 @@ public class OrdersService : IOrdersService
                     existingWindow.Name = window.WindowName;
 
                     var subElementsToRemove = existingWindow.SubElements
-                        .Where(x => x.Id != 0 && !window.SubElements.Any(se => se.SubElementId == x.Id))
+                        .Where(x => !window.SubElements.Any(se => se.SubElementId == x.Id))
                         .ToList();
 
                     subElementsToDelete.AddRange(subElementsToRemove);

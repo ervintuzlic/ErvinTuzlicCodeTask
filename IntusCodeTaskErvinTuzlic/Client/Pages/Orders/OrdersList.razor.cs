@@ -93,6 +93,8 @@ partial class OrdersList
 
             ToastService.Notify(new(ToastType.Success, "Success!", "You have successfully deleted order"));
 
+            await LoadOrders();
+
             await Grid.RefreshDataAsync();
 
             StateHasChanged();
