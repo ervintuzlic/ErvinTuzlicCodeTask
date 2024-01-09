@@ -162,6 +162,8 @@ public class OrdersService : IOrdersService
 
             await _context.SaveChangesAsync();
 
+            await transaction.CommitAsync();
+
             return new OrderUpsertResponse { OrderId = existingOrder.Id };
         }
         else
