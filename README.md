@@ -11,7 +11,3 @@ The Shared project serves as a centralized location for sharing files between th
 
 ### 3. Server/API
 The Server project functions as the backend/API of the application. It handles incoming requests from the client, contains the server-side logic, and interacts with the database. The project also includes SQL Server configurations for database connections and services that handle business logic. It utilizes the DTOs defined in the Shared project for data communication with the client.
-
-
-# Cloning Repository - IMPORTANT
-Make sure before starting the application to run **update-database** within **Package Manager Console**. Ensure that database "**IntusCodeTaskErvinTuzlic.DATA**" is created within SQL Server Management Studio.
